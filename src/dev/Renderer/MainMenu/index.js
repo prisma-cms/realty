@@ -155,6 +155,51 @@ export class MainMenu extends Component {
           <Grid
             item
           >
+            <Link
+              to="/realty-areas"
+            >
+              <Typography
+                component="span"
+                className={classes.link}
+              >
+                Areas
+            </Typography>
+            </Link>
+          </Grid>
+
+          <Grid
+            item
+          >
+            <Link
+              to="/realty-objects"
+            >
+              <Typography
+                component="span"
+                className={classes.link}
+              >
+                Objects
+            </Typography>
+            </Link>
+          </Grid>
+
+          <Grid
+            item
+          >
+            <Link
+              to="/realty-floors"
+            >
+              <Typography
+                component="span"
+                className={classes.link}
+              >
+                Floors
+            </Typography>
+            </Link>
+          </Grid>
+
+          <Grid
+            item
+          >
             <a
               href="/graphql-voyager"
             >

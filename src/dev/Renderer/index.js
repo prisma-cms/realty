@@ -4,6 +4,10 @@ import PropTypes from "prop-types";
 import App, {
   ContextProvider,
   SubscriptionProvider,
+
+  RealtyAreasPage,
+  RealtyAreaPage,
+  RealtyAreaCreatePage,
 } from "../../App";
 
 import { Renderer as PrismaCmsRenderer } from '@prisma-cms/front'
@@ -33,6 +37,38 @@ class DevRenderer extends PrismaCmsRenderer {
         exact: true,
         path: "/",
         component: App,
+      },
+      {
+        exact: true,
+        path: "/realty-areas",
+        component: RealtyAreasPage,
+      },
+      {
+        exact: true,
+        path: "/realty-areas/create",
+        component: RealtyAreaCreatePage,
+      },
+      {
+        exact: true,
+        path: "/realty-areas/:id",
+        render: props => {
+
+          const {
+            match: {
+              params: {
+                id,
+              },
+            },
+          } = props;
+
+          return <RealtyAreaPage
+            key={id}
+            where={{
+              id,
+            }}
+            {...props}
+          />
+        },
       },
       // {
       //   path: "*",

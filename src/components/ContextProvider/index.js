@@ -5,6 +5,7 @@ import React, {
 
 import Context from '@prisma-cms/context';
 
+import * as UI from "../ui";
 
 class ContextProvider extends Component {
 
@@ -44,6 +45,7 @@ class ContextProvider extends Component {
         ...query,
         ...this.prepareQuery(),
       },
+      ...UI,
     });
 
     return <Context.Provider
@@ -57,12 +59,12 @@ class ContextProvider extends Component {
   prepareQuery() {
 
     return {
-      ...this.prepareUserQuery(),
+      ...this.prepareRealtyAreaQuery(),
     }
   }
+  
 
-  prepareUserQuery() {
-
+  prepareRealtyAreaQuery() {
 
     const {
       queryFragments,
@@ -70,23 +72,36 @@ class ContextProvider extends Component {
 
 
     const {
+      RealtyAreaNoNestingFragment,
       UserNoNestingFragment,
       BatchPayloadNoNestingFragment,
     } = queryFragments;
 
 
+    const realtyAreaFragment = `
+      fragment realtyArea on RealtyArea {
+        ...RealtyAreaNoNesting
+        CreatedBy{
+          ...UserNoNesting
+        }
+      }
 
-    const usersConnection = `
-      query usersConnection (
-        $where: UserWhereInput
-        $orderBy: UserOrderByInput
+      ${UserNoNestingFragment}
+      ${RealtyAreaNoNestingFragment}
+    `;
+
+
+    const realtyAreasConnection = `
+      query realtyAreasConnection (
+        $where: RealtyAreaWhereInput
+        $orderBy: RealtyAreaOrderByInput
         $skip: Int
         $after: String
         $before: String
         $first: Int
         $last: Int
       ){
-        objectsConnection: usersConnection (
+        objectsConnection: realtyAreasConnection (
           where: $where
           orderBy: $orderBy
           skip: $skip
@@ -100,27 +115,27 @@ class ContextProvider extends Component {
           }
           edges{
             node{
-              ...UserNoNesting
+              ...realtyArea
             }
           }
         }
       }
 
-      ${UserNoNestingFragment}
+      ${realtyAreaFragment}
     `;
 
 
-    const users = `
-      query users (
-        $where: UserWhereInput
-        $orderBy: UserOrderByInput
+    const realtyAreas = `
+      query realtyAreas (
+        $where: RealtyAreaWhereInput
+        $orderBy: RealtyAreaOrderByInput
         $skip: Int
         $after: String
         $before: String
         $first: Int
         $last: Int
       ){
-        objects: users (
+        objects: realtyAreas (
           where: $where
           orderBy: $orderBy
           skip: $skip
@@ -129,34 +144,34 @@ class ContextProvider extends Component {
           first: $first
           last: $last
         ){
-          ...UserNoNesting
+          ...realtyArea
         }
       }
 
-      ${UserNoNestingFragment}
+      ${realtyAreaFragment}
     `;
 
 
-    const user = `
-      query user (
-        $where: UserWhereUniqueInput!
+    const realtyArea = `
+      query realtyArea (
+        $where: RealtyAreaWhereUniqueInput!
       ){
-        object: user (
+        object: realtyArea(
           where: $where
         ){
-          ...UserNoNesting
+          ...realtyArea
         }
       }
 
-      ${UserNoNestingFragment}
+      ${realtyAreaFragment}
     `;
 
 
-    const createUserProcessor = `
-      mutation createUserProcessor(
-        $data: UserCreateInput!
+    const createRealtyAreaProcessor = `
+      mutation createRealtyAreaProcessor(
+        $data: RealtyAreaCreateInput!
       ) {
-        response: createUserProcessor(
+        response: createRealtyAreaProcessor(
           data: $data
         ){
           success
@@ -166,21 +181,21 @@ class ContextProvider extends Component {
             message
           }
           data{
-            ...UserNoNesting
+            ...realtyArea
           }
         }
       }
 
-      ${UserNoNestingFragment}
+      ${realtyAreaFragment}
     `;
 
 
-    const updateUserProcessor = `
-      mutation updateUserProcessor(
-        $data: UserUpdateInput!
-        $where: UserWhereUniqueInput!
+    const updateRealtyAreaProcessor = `
+      mutation updateRealtyAreaProcessor(
+        $data: RealtyAreaUpdateInput!
+        $where: RealtyAreaWhereUniqueInput!
       ) {
-        response: updateUserProcessor(
+        response: updateRealtyAreaProcessor(
           data: $data
           where: $where
         ){
@@ -191,35 +206,34 @@ class ContextProvider extends Component {
             message
           }
           data{
-            ...UserNoNesting
+            ...realtyArea
           }
         }
       }
 
-      ${UserNoNestingFragment}
+      ${realtyAreaFragment}
     `;
 
 
-
-    const deleteUser = `
-      mutation deleteUser (
-        $where: UserWhereUniqueInput!
+    const deleteRealtyArea = `
+      mutation deleteRealtyArea (
+        $where: RealtyAreaWhereUniqueInput!
       ){
-        deleteUser(
+        deleteRealtyArea(
           where: $where
         ){
-          ...UserNoNesting
+          ...RealtyAreaNoNesting
         }
       }
-      ${UserNoNestingFragment}
+      ${RealtyAreaNoNestingFragment}
     `;
 
 
-    const deleteManyUsers = `
-      mutation deleteManyUsers (
-        $where: UserWhereInput
+    const deleteManyRealtyAreas = `
+      mutation deleteManyRealtyAreas (
+        $where: RealtyAreaWhereInput
       ){
-        deleteManyUsers(
+        deleteManyRealtyAreas(
           where: $where
         ){
           ...BatchPayloadNoNesting
@@ -230,15 +244,14 @@ class ContextProvider extends Component {
 
 
     return {
-      usersConnection,
-      users,
-      user,
-      createUserProcessor,
-      updateUserProcessor,
-      deleteUser,
-      deleteManyUsers,
+      realtyAreasConnection,
+      realtyAreas,
+      realtyArea,
+      createRealtyAreaProcessor,
+      updateRealtyAreaProcessor,
+      deleteRealtyArea,
+      deleteManyRealtyAreas,
     }
-
   }
 
 }
