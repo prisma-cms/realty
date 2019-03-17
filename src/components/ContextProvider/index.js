@@ -60,6 +60,8 @@ class ContextProvider extends Component {
 
     return {
       ...this.prepareRealtyAreaQuery(),
+      ...this.prepareRealtyObjectQuery(),
+      ...this.prepareRealtyFloorQuery(),
     }
   }
   
@@ -251,6 +253,388 @@ class ContextProvider extends Component {
       updateRealtyAreaProcessor,
       deleteRealtyArea,
       deleteManyRealtyAreas,
+    }
+  }
+  
+
+  prepareRealtyObjectQuery() {
+
+    const {
+      queryFragments,
+    } = this.context;
+
+
+    const {
+      RealtyObjectNoNestingFragment,
+      UserNoNestingFragment,
+      BatchPayloadNoNestingFragment,
+    } = queryFragments;
+
+
+    const realtyObjectFragment = `
+      fragment realtyObject on RealtyObject {
+        ...RealtyObjectNoNesting
+        CreatedBy{
+          ...UserNoNesting
+        }
+      }
+
+      ${UserNoNestingFragment}
+      ${RealtyObjectNoNestingFragment}
+    `;
+
+
+    const realtyObjectsConnection = `
+      query realtyObjectsConnection (
+        $where: RealtyObjectWhereInput
+        $orderBy: RealtyObjectOrderByInput
+        $skip: Int
+        $after: String
+        $before: String
+        $first: Int
+        $last: Int
+      ){
+        objectsConnection: realtyObjectsConnection (
+          where: $where
+          orderBy: $orderBy
+          skip: $skip
+          after: $after
+          before: $before
+          first: $first
+          last: $last
+        ){
+          aggregate{
+            count
+          }
+          edges{
+            node{
+              ...realtyObject
+            }
+          }
+        }
+      }
+
+      ${realtyObjectFragment}
+    `;
+
+
+    const realtyObjects = `
+      query realtyObjects (
+        $where: RealtyObjectWhereInput
+        $orderBy: RealtyObjectOrderByInput
+        $skip: Int
+        $after: String
+        $before: String
+        $first: Int
+        $last: Int
+      ){
+        objects: realtyObjects (
+          where: $where
+          orderBy: $orderBy
+          skip: $skip
+          after: $after
+          before: $before
+          first: $first
+          last: $last
+        ){
+          ...realtyObject
+        }
+      }
+
+      ${realtyObjectFragment}
+    `;
+
+
+    const realtyObject = `
+      query realtyObject (
+        $where: RealtyObjectWhereUniqueInput!
+      ){
+        object: realtyObject(
+          where: $where
+        ){
+          ...realtyObject
+        }
+      }
+
+      ${realtyObjectFragment}
+    `;
+
+
+    const createRealtyObjectProcessor = `
+      mutation createRealtyObjectProcessor(
+        $data: RealtyObjectCreateInput!
+      ) {
+        response: createRealtyObjectProcessor(
+          data: $data
+        ){
+          success
+          message
+          errors{
+            key
+            message
+          }
+          data{
+            ...realtyObject
+          }
+        }
+      }
+
+      ${realtyObjectFragment}
+    `;
+
+
+    const updateRealtyObjectProcessor = `
+      mutation updateRealtyObjectProcessor(
+        $data: RealtyObjectUpdateInput!
+        $where: RealtyObjectWhereUniqueInput!
+      ) {
+        response: updateRealtyObjectProcessor(
+          data: $data
+          where: $where
+        ){
+          success
+          message
+          errors{
+            key
+            message
+          }
+          data{
+            ...realtyObject
+          }
+        }
+      }
+
+      ${realtyObjectFragment}
+    `;
+
+
+    const deleteRealtyObject = `
+      mutation deleteRealtyObject (
+        $where: RealtyObjectWhereUniqueInput!
+      ){
+        deleteRealtyObject(
+          where: $where
+        ){
+          ...RealtyObjectNoNesting
+        }
+      }
+      ${RealtyObjectNoNestingFragment}
+    `;
+
+
+    const deleteManyRealtyObjects = `
+      mutation deleteManyRealtyObjects (
+        $where: RealtyObjectWhereInput
+      ){
+        deleteManyRealtyObjects(
+          where: $where
+        ){
+          ...BatchPayloadNoNesting
+        }
+      }
+      ${BatchPayloadNoNestingFragment}
+    `;
+
+
+    return {
+      realtyObjectsConnection,
+      realtyObjects,
+      realtyObject,
+      createRealtyObjectProcessor,
+      updateRealtyObjectProcessor,
+      deleteRealtyObject,
+      deleteManyRealtyObjects,
+    }
+  }
+  
+
+  prepareRealtyFloorQuery() {
+
+    const {
+      queryFragments,
+    } = this.context;
+
+
+    const {
+      RealtyFloorNoNestingFragment,
+      UserNoNestingFragment,
+      BatchPayloadNoNestingFragment,
+    } = queryFragments;
+
+
+    const realtyFloorFragment = `
+      fragment realtyFloor on RealtyFloor {
+        ...RealtyFloorNoNesting
+        CreatedBy{
+          ...UserNoNesting
+        }
+      }
+
+      ${UserNoNestingFragment}
+      ${RealtyFloorNoNestingFragment}
+    `;
+
+
+    const realtyFloorsConnection = `
+      query realtyFloorsConnection (
+        $where: RealtyFloorWhereInput
+        $orderBy: RealtyFloorOrderByInput
+        $skip: Int
+        $after: String
+        $before: String
+        $first: Int
+        $last: Int
+      ){
+        objectsConnection: realtyFloorsConnection (
+          where: $where
+          orderBy: $orderBy
+          skip: $skip
+          after: $after
+          before: $before
+          first: $first
+          last: $last
+        ){
+          aggregate{
+            count
+          }
+          edges{
+            node{
+              ...realtyFloor
+            }
+          }
+        }
+      }
+
+      ${realtyFloorFragment}
+    `;
+
+
+    const realtyFloors = `
+      query realtyFloors (
+        $where: RealtyFloorWhereInput
+        $orderBy: RealtyFloorOrderByInput
+        $skip: Int
+        $after: String
+        $before: String
+        $first: Int
+        $last: Int
+      ){
+        objects: realtyFloors (
+          where: $where
+          orderBy: $orderBy
+          skip: $skip
+          after: $after
+          before: $before
+          first: $first
+          last: $last
+        ){
+          ...realtyFloor
+        }
+      }
+
+      ${realtyFloorFragment}
+    `;
+
+
+    const realtyFloor = `
+      query realtyFloor (
+        $where: RealtyFloorWhereUniqueInput!
+      ){
+        object: realtyFloor(
+          where: $where
+        ){
+          ...realtyFloor
+        }
+      }
+
+      ${realtyFloorFragment}
+    `;
+
+
+    const createRealtyFloorProcessor = `
+      mutation createRealtyFloorProcessor(
+        $data: RealtyFloorCreateInput!
+      ) {
+        response: createRealtyFloorProcessor(
+          data: $data
+        ){
+          success
+          message
+          errors{
+            key
+            message
+          }
+          data{
+            ...realtyFloor
+          }
+        }
+      }
+
+      ${realtyFloorFragment}
+    `;
+
+
+    const updateRealtyFloorProcessor = `
+      mutation updateRealtyFloorProcessor(
+        $data: RealtyFloorUpdateInput!
+        $where: RealtyFloorWhereUniqueInput!
+      ) {
+        response: updateRealtyFloorProcessor(
+          data: $data
+          where: $where
+        ){
+          success
+          message
+          errors{
+            key
+            message
+          }
+          data{
+            ...realtyFloor
+          }
+        }
+      }
+
+      ${realtyFloorFragment}
+    `;
+
+
+    const deleteRealtyFloor = `
+      mutation deleteRealtyFloor (
+        $where: RealtyFloorWhereUniqueInput!
+      ){
+        deleteRealtyFloor(
+          where: $where
+        ){
+          ...RealtyFloorNoNesting
+        }
+      }
+      ${RealtyFloorNoNestingFragment}
+    `;
+
+
+    const deleteManyRealtyFloors = `
+      mutation deleteManyRealtyFloors (
+        $where: RealtyFloorWhereInput
+      ){
+        deleteManyRealtyFloors(
+          where: $where
+        ){
+          ...BatchPayloadNoNesting
+        }
+      }
+      ${BatchPayloadNoNestingFragment}
+    `;
+
+
+    return {
+      realtyFloorsConnection,
+      realtyFloors,
+      realtyFloor,
+      createRealtyFloorProcessor,
+      updateRealtyFloorProcessor,
+      deleteRealtyFloor,
+      deleteManyRealtyFloors,
     }
   }
 

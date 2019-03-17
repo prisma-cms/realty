@@ -8,6 +8,15 @@ import App, {
   RealtyAreasPage,
   RealtyAreaPage,
   RealtyAreaCreatePage,
+
+  RealtyObjectsPage,
+  RealtyObjectPage,
+  RealtyObjectCreatePage,
+
+  RealtyFloorsPage,
+  RealtyFloorPage,
+  RealtyFloorCreatePage,
+
 } from "../../App";
 
 import { Renderer as PrismaCmsRenderer } from '@prisma-cms/front'
@@ -62,6 +71,70 @@ class DevRenderer extends PrismaCmsRenderer {
           } = props;
 
           return <RealtyAreaPage
+            key={id}
+            where={{
+              id,
+            }}
+            {...props}
+          />
+        },
+      },
+      {
+        exact: true,
+        path: "/realty-objects",
+        component: RealtyObjectsPage,
+      },
+      {
+        exact: true,
+        path: "/realty-objects/create",
+        component: RealtyObjectCreatePage,
+      },
+      {
+        exact: true,
+        path: "/realty-objects/:id",
+        render: props => {
+
+          const {
+            match: {
+              params: {
+                id,
+              },
+            },
+          } = props;
+
+          return <RealtyObjectPage
+            key={id}
+            where={{
+              id,
+            }}
+            {...props}
+          />
+        },
+      },
+      {
+        exact: true,
+        path: "/realty-floors",
+        component: RealtyFloorsPage,
+      },
+      {
+        exact: true,
+        path: "/realty-floors/create",
+        component: RealtyFloorCreatePage,
+      },
+      {
+        exact: true,
+        path: "/realty-floors/:id",
+        render: props => {
+
+          const {
+            match: {
+              params: {
+                id,
+              },
+            },
+          } = props;
+
+          return <RealtyFloorPage
             key={id}
             where={{
               id,

@@ -1,5 +1,8 @@
+1.4.2
 =================================
 - Upgrade boilerplate
+- Added RealtyObject pages
+- Added RealtyFloor pages
 
 1.4.1
 =================================
