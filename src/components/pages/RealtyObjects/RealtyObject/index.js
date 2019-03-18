@@ -84,7 +84,7 @@ class RealtyObject extends ObjectPage {
         name = name || id;
 
         return this.setPageMeta({
-          title: name && `Площадь ${name}` || undefined,
+          title: name && `Объект недвижимости ${name}` || undefined,
           status: id ? 200 : 404,
         })
       }}

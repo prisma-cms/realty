@@ -44,7 +44,7 @@ class RealtyObjectsPage extends ListPage {
   setPageMeta(meta) {
 
     return super.setPageMeta({
-      title: "Площади",
+      title: "Объекты недвижимости",
       ...meta,
     });
   }
